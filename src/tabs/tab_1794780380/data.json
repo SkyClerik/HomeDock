@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Stable Diffusion FORGE",
+    "url": "",
+    "dirPath": "C:\\",
+    "exePath": "C:\\Windows\\System32\\calc.exe",
+    "icon": "SDF",
+    "category": "своя категория",
+    "tag": "standart",
+    "args": "",
+    "description": ""
+  },
+  {
+    "name": "Калькулятор",
+    "url": "",
+    "dirPath": "C:\\Windows\\System32",
+    "exePath": "C:\\Windows\\System32\\calc.exe",
+    "icon": "",
+    "category": "Программы",
+    "tag": "soft",
+    "args": "",
+    "description": ""
+  }
+]

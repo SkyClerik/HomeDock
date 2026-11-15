@@ -1,0 +1,122 @@
+.settings-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(5px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 16px;
+}
+
+.settings-modal-backdrop.open {
+  display: flex;
+}
+
+.settings-modal {
+  width: 480px;
+  max-width: 95vw;
+  background: #0a0b1e;
+  border: 1px solid var(--accent, #ff1453);
+  border-radius: 10px;
+  padding: 22px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.95);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.settings-modal h3 {
+  font-size: 15px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #fff;
+  margin: 0;
+}
+
+.settings-group {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.settings-group label {
+  font-size: 11px;
+  color: var(--text-muted, #9ca3af);
+  text-transform: uppercase;
+}
+
+.settings-group select,
+.settings-group input {
+  width: 100%;
+  background: #050511;
+  border: 1px solid rgba(75, 85, 99, 0.9);
+  border-radius: 6px;
+  padding: 8px 10px;
+  color: #f9fafb;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+.settings-group select:focus,
+.settings-group input:focus {
+  border-color: var(--accent, #ff1453);
+}
+
+.settings-path-row {
+  display: flex;
+  gap: 8px;
+}
+
+.settings-path-row input {
+  flex: 1;
+  min-width: 0;
+}
+
+.settings-pick-btn {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(75, 85, 99, 0.9);
+  background: #10132a;
+  color: #e5e7eb;
+  font-size: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color 150ms;
+}
+
+.settings-pick-btn:hover {
+  border-color: var(--accent, #ff1453);
+  color: #fff;
+}
+
+.settings-hint {
+  font-size: 11.5px;
+  color: var(--text-muted, #9ca3af);
+  line-height: 1.4;
+}
+
+.settings-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.settings-save-btn {
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: 1px solid var(--accent, #ff1453);
+  background: radial-gradient(circle at top, rgba(255, 20, 83, 0.3), rgba(12, 10, 25, 0.95));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 160ms ease-out;
+}
+
+.settings-save-btn:hover {
+  box-shadow: 0 0 14px rgba(255, 20, 83, 0.55);
+}

@@ -1,0 +1,88 @@
+<meta name="tab-title" content="📦 Шаблон: Древо">
+
+<div class="hp-workspace">
+  <!-- ЛЕВАЯ ЧАСТЬ: ДЕРЕВО ЭЛЕМЕНТОВ -->
+  <section class="hp-tree-pane">
+    <div class="hp-pane-header">
+      <div class="hp-header-left">
+        <span class="hp-header-icon">🌳</span>
+        <span class="hp-header-title">Структура проекта</span>
+      </div>
+      <div class="hp-header-actions">
+        <button type="button" class="hp-btn hp-btn-accent" id="hp-add-root-btn">+ Элемент</button>
+        <button type="button" class="hp-btn" id="hp-expand-all-btn" title="Развернуть всё">▾</button>
+        <button type="button" class="hp-btn" id="hp-collapse-all-btn" title="Свернуть всё">▸</button>
+      </div>
+    </div>
+
+    <div class="hp-tree-list" id="hp-tree-root">
+      <!-- Дерево генерируется из data.json -->
+    </div>
+  </section>
+
+  <!-- ПРАВАЯ ЧАСТЬ: ИНСПЕКТОР И MARKDOWN -->
+  <section class="hp-detail-pane" id="hp-detail-pane">
+    <div class="hp-empty-state" id="hp-empty-state">
+      Выберите элемент слева или создайте новый, чтобы открыть описание.
+    </div>
+
+    <div class="hp-inspector" id="hp-inspector" style="display: none;">
+      <div class="hp-detail-header">
+        <input type="text" id="hp-field-title" class="hp-title-input" placeholder="Название элемента...">
+        <div class="hp-detail-controls">
+          <button type="button" class="hp-btn active" id="hp-mode-view">👁️ Просмотр</button>
+          <button type="button" class="hp-btn" id="hp-mode-edit">✏️ Редактор</button>
+          <button type="button" class="hp-btn hp-btn-danger" id="hp-delete-node-btn" title="Удалить ветку">🗑️</button>
+        </div>
+      </div>
+
+      <!-- Мета-поля как в HacknPlan -->
+      <div class="hp-meta-grid">
+        <div class="hp-meta-item">
+          <label>Тип элемента</label>
+          <input type="text" id="hp-field-type" placeholder="Location, Mechanic, Note...">
+        </div>
+        <div class="hp-meta-item">
+          <label>Теги (через запятую)</label>
+          <input type="text" id="hp-field-tags" placeholder="идея, срочно, сюжет...">
+        </div>
+        <div class="hp-meta-item">
+          <label>Цветовой маркер</label>
+          <div class="hp-color-picker" id="hp-color-picker">
+            <button type="button" class="hp-color-dot" data-color="" title="Без цвета" style="background: rgba(255,255,255,0.12);"></button>
+            <button type="button" class="hp-color-dot" data-color="#ef4444" title="Красный" style="background: #ef4444;"></button>
+            <button type="button" class="hp-color-dot" data-color="#f59e0b" title="Оранжевый" style="background: #f59e0b;"></button>
+            <button type="button" class="hp-color-dot" data-color="#22c55e" title="Зеленый" style="background: #22c55e;"></button>
+            <button type="button" class="hp-color-dot" data-color="#38bdf8" title="Голубой" style="background: #38bdf8;"></button>
+            <button type="button" class="hp-color-dot" data-color="#a855f7" title="Фиолетовый" style="background: #a855f7;"></button>
+          </div>
+        </div>
+        <div class="hp-meta-item">
+          <label>Параметры элемента</label>
+          <div style="display: flex; align-items: center; gap: 16px; padding-top: 3px;">
+            <label class="hp-check-label" style="padding-top: 0;">
+              <input type="checkbox" id="hp-field-done">
+              <span id="hp-done-text">В работе</span>
+            </label>
+            <label class="hp-check-label" style="padding-top: 0;">
+              <input type="checkbox" id="hp-field-show-cb" checked>
+              <span>Чекбокс в списке</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Панель инструментов (видна только в режиме редактора) -->
+      <div class="hp-editor-toolbar" id="hp-editor-toolbar" style="display: none;">
+        <button type="button" class="hp-btn" id="hp-insert-img-btn">🖼️ Вставить картинку с ПК</button>
+        <span class="hp-toolbar-hint">Поддерживается полный Markdown: # заголовки, **жирный**, - списки, [ ] чеклисты, ```код```</span>
+      </div>
+
+      <!-- Область контента -->
+      <div class="hp-content-area">
+        <div class="hp-markdown-body" id="hp-md-preview"></div>
+        <textarea class="hp-markdown-editor" id="hp-md-editor" style="display: none;" placeholder="Пишите заметку в формате Markdown..."></textarea>
+      </div>
+    </div>
+  </section>
+</div>

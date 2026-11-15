@@ -1,0 +1,60 @@
+<meta name="tab-title" content="📦 Шаблон: Ссылки">
+
+<div class="links-toolbar">
+  <div class="section-filters" id="links-cat-filters">
+    <button class="filter-chip active" data-cat="all">Все категории</button>
+  </div>
+  <button class="btn-add-card" id="btn-open-add-link">+ Добавить ссылку</button>
+</div>
+
+<div id="links-categories-root"></div>
+
+<!-- Модальное окно создания / редактирования ссылки -->
+<div class="dock-modal-backdrop" id="link-modal">
+  <div class="dock-modal">
+    <h3 id="link-modal-title">Новая ссылка</h3>
+    <input type="hidden" id="edit-link-index" value="-1">
+
+    <div class="form-group">
+      <label>Название</label>
+      <input type="text" id="field-name" placeholder="Например: Google">
+    </div>
+
+    <div class="form-group">
+      <label>URL адрес</label>
+      <input type="text" id="field-url" placeholder="https://...">
+    </div>
+
+    <div class="form-group">
+      <label>Картинка (URL, имя файла в папке вкладки или 1-3 буквы)</label>
+      <input type="text" id="field-icon" placeholder="logo.png или https://...">
+    </div>
+
+    <div class="form-row-2">
+      <div class="form-group">
+        <label>Категория</label>
+        <input type="text" id="field-category" placeholder="AI, YOUTUBE, заметки...">
+      </div>
+      <div class="form-group">
+        <label>Тег</label>
+        <input type="text" id="field-tag" placeholder="video, dev, wiki...">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label>Описание (свыше 200 символов свернется до наведения)</label>
+      <textarea id="field-desc" rows="4" placeholder="Подробное описание ресурса..."></textarea>
+    </div>
+
+    <div class="modal-footer" style="justify-content: space-between;">
+      <div style="display: flex; gap: 6px;">
+        <button type="button" class="srv-btn" id="btn-copy-link" title="Скопировать данные формы в буфер обмена">📋 Копировать</button>
+        <button type="button" class="srv-btn" id="btn-paste-link" title="Вставить данные из буфера обмена в форму">📥 Вставить</button>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button type="button" class="srv-btn" id="btn-cancel-link">Отмена</button>
+        <button type="button" class="btn-add-card" id="btn-save-link">💾 Сохранить</button>
+      </div>
+    </div>
+  </div>
+</div>

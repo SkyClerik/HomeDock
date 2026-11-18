@@ -526,11 +526,6 @@ class HomeDockHandler(http.server.SimpleHTTPRequestHandler):
             os.makedirs(target_dir, exist_ok=True)
             self._extract_template_archive(archive_path, target_dir)
 
-            # Удаляем manifest.json из рабочей папки вкладки, чтобы не мешался
-            manifest_in_tab = os.path.join(target_dir, 'manifest.json')
-            if os.path.exists(manifest_in_tab):
-                os.remove(manifest_in_tab)
-
             # Переиспользуем уже созданный ранее помощник для обновления заголовка
             if custom_title:
                 self._update_tab_meta_title(target_dir, custom_title)

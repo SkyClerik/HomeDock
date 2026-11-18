@@ -21,9 +21,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         <label>Тема оформления</label>
         <select id="cfg-theme">
           <option value="styles-gx.css">Opera GX</option>
-          <option value="styles-dark.css">Dark</option>
-          <option value="styles-light.css">Light</option>
-          <option value="styles-mint.css">Mint</option>
+          <option value="styles-cp2077.css">CP 2077</option>
+          <option value="styles-genshin.css">Genshin</option>
+          <option value="styles-nier.css">Nier Automata</option>
           <option value="styles-ubuntu.css">Ubuntu</option>
         </select>
       </div>

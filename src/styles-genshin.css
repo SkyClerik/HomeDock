@@ -1,0 +1,1232 @@
+:root {
+    /* Фирменная палитра интерфейса Genshin Impact */
+    --bg-color: #ece5d8;
+    --bg-elevated: #f9f6f0;
+    --bg-navy: #3b4255;
+    --bg-navy-dark: #2c3140;
+    --gold-primary: #d3bc8e;
+    --gold-bright: #e6cfa3;
+    --gold-dark: #9e8658;
+    --accent-blue: #4a90e2;
+    --text-main: #495366;
+    --text-muted: #848994;
+    --text-light: #ece5d8;
+    --border-gold: rgba(211, 188, 142, 0.75);
+    --card-radius: 12px;
+    --transition-fast: 180ms cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+/* Сброс и кастомный скроллбар */
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(59, 66, 85, 0.08);
+    border-radius: 999px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gold-primary);
+    border-radius: 999px;
+    border: 1px solid var(--bg-navy);
+}
+
+/* Светлый небесно-пергаментный фон */
+
+body {
+    font-family:
+        "Segoe UI",
+        "Trebuchet MS",
+        system-ui,
+        -apple-system,
+        sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-color);
+    background-image:
+        radial-gradient(
+            circle at 15% 15%,
+            rgba(255, 255, 255, 0.85),
+            transparent 45%
+        ),
+        radial-gradient(
+            circle at 85% 80%,
+            rgba(211, 188, 142, 0.35),
+            transparent 50%
+        ),
+        linear-gradient(135deg, #f3efe6 0%, #e5dec9 100%);
+    min-height: 100vh;
+    margin: 0;
+    padding: 22px 0 0 0;
+    background-attachment: fixed;
+}
+
+/* Главный контейнер */
+
+.app-shell {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.app-shell::before {
+    content: none;
+}
+
+/* Фиксированная шапка в стиле меню Паймон */
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: linear-gradient(
+        180deg,
+        rgba(59, 66, 85, 0.97) 0%,
+        rgba(44, 49, 64, 0.98) 100%
+    );
+    border-bottom: 2px solid var(--gold-primary);
+    padding: 10px 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 4px 18px rgba(44, 49, 64, 0.25);
+}
+
+.brand {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.brand-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--gold-bright);
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+/* Четырёхконечный ромб-звезда в стиле Genshin */
+
+.brand-dot {
+    width: 12px;
+    height: 12px;
+    background: var(--gold-bright);
+    transform: rotate(45deg);
+    border: 1px solid #ffffff;
+    box-shadow: 0 0 10px rgba(230, 207, 163, 0.9);
+}
+
+.brand-subtitle {
+    font-size: 12px;
+    color: rgba(236, 229, 216, 0.78);
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+/* Счётчик ссылок */
+
+.pill {
+    border-radius: 999px;
+    border: 1px solid var(--border-gold);
+    background: rgba(44, 49, 64, 0.85);
+    padding: 4px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold-bright);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.pill-dot {
+    width: 8px;
+    height: 8px;
+    background: #73e6a8;
+    transform: rotate(45deg);
+    box-shadow: 0 0 8px rgba(115, 230, 168, 0.85);
+}
+
+/* Поле поиска */
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border-gold);
+    background: rgba(249, 246, 240, 0.95);
+    padding: 5px 12px;
+    transition:
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast);
+}
+
+.search-box:focus-within {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(211, 188, 142, 0.5);
+}
+
+.search-box input {
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--bg-navy);
+    font-size: 13px;
+    font-weight: 500;
+    width: 150px;
+}
+
+.search-box input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-kbd {
+    border-radius: 999px;
+    border: 1px solid var(--gold-primary);
+    padding: 1px 7px;
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--bg-navy);
+    background: var(--gold-bright);
+}
+
+/* Селект темы */
+
+.theme-select-wrap select {
+    border-radius: 999px;
+    border: 1px solid var(--border-gold);
+    background: var(--bg-elevated);
+    color: var(--bg-navy);
+    font-size: 12px;
+    font-weight: 600;
+    padding: 5px 12px;
+    outline: none;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.theme-select-wrap select:hover {
+    background: var(--gold-bright);
+    border-color: #ffffff;
+}
+
+/* Основной контент */
+
+main {
+    position: fixed;
+    top: 76px;
+    bottom: 138px;
+    left: 0;
+    right: 0;
+    overflow-y: auto;
+    padding: 14px 22px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(158, 134, 88, 0.35);
+}
+
+.section-title {
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--bg-navy);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title::before {
+    content: "✦";
+    color: var(--gold-dark);
+    font-size: 14px;
+}
+
+.section-title span {
+    font-size: 12px;
+    font-weight: 500;
+    text-transform: none;
+    color: var(--text-muted);
+}
+
+.section-filters {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+}
+
+.filter-chip {
+    padding: 4px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(158, 134, 88, 0.45);
+    background: var(--bg-elevated);
+    color: var(--text-main);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    user-select: none;
+    white-space: nowrap;
+}
+
+.filter-chip.active,
+.filter-chip:hover {
+    border-color: var(--gold-primary);
+    background: var(--bg-navy);
+    color: var(--gold-bright);
+    box-shadow: 0 2px 8px rgba(59, 66, 85, 0.25);
+}
+
+/* Сетка карточек */
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 14px;
+    align-items: stretch;
+}
+
+/* Карточка в стиле предметов/артефактов Genshin Impact */
+
+.card {
+    position: relative;
+    border-radius: var(--card-radius);
+    background: var(--bg-elevated);
+    border: 1px solid var(--border-gold);
+    box-shadow: 0 3px 10px rgba(73, 83, 102, 0.08);
+    padding: 9px 10px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+        transform var(--transition-fast),
+        box-shadow var(--transition-fast),
+        border-color var(--transition-fast),
+        background var(--transition-fast);
+}
+
+/* Тонкая внутренняя золотая рамка при наведении */
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: 3px;
+    border-radius: 9px;
+    border: 1px solid rgba(211, 188, 142, 0.45);
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    pointer-events: none;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    background: #ffffff;
+    border-color: var(--gold-dark);
+    box-shadow: 0 8px 20px rgba(158, 134, 88, 0.24);
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+/* Внутренняя раскладка карточки */
+
+.card-inner {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 10px;
+    align-items: stretch;
+}
+
+/* Левая часть — постер */
+
+.card-thumb {
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #e5dec9, #d3bc8e);
+    border: 1px solid var(--gold-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-fast);
+}
+
+.card:hover .card-thumb img {
+    transform: scale(1.04);
+}
+
+.card-thumb-fallback {
+    font-weight: 700;
+    font-size: 20px;
+    color: var(--bg-navy);
+}
+
+/* Правая часть карточки */
+
+.card-right {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    color: var(--bg-navy);
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.card-url {
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin-bottom: 4px;
+}
+
+.card-meta-row {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+}
+
+/* Тег/категория и кнопка "Открыть" */
+
+.tag-pill {
+    padding: 2px 9px;
+    border-radius: 999px;
+    border: 1px solid var(--gold-primary);
+    background: #f3efe6;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--gold-dark);
+}
+
+.card:hover .tag-pill {
+    background: var(--bg-navy);
+    border-color: var(--bg-navy);
+    color: var(--gold-bright);
+}
+
+.card-open {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--gold-dark);
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.card-open-arrow {
+    transition: transform var(--transition-fast);
+}
+
+.card:hover .card-open-arrow {
+    transform: translateX(3px);
+}
+
+/* Нижняя панель (footer) */
+
+footer {
+    padding: 8px 22px 11px 22px;
+    border-top: 2px solid var(--gold-primary);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-light);
+    background: var(--bg-navy-dark);
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gold-bright);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    background: #73e6a8;
+    transform: rotate(45deg);
+    box-shadow: 0 0 8px rgba(115, 230, 168, 0.9);
+}
+
+/* Фиксированный низ: панель описания + footer */
+
+.details-panel,
+footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    z-index: 100;
+}
+
+/* Окно описания в стиле диалогов/свитка заданий Тейвата */
+
+.details-panel {
+    bottom: 46px;
+    margin: 0 22px 10px 22px;
+    border-radius: 14px;
+    border: 1.5px solid var(--gold-primary);
+    background: rgba(249, 246, 240, 0.97);
+    box-shadow: 0 6px 20px rgba(44, 49, 64, 0.16);
+    padding: 9px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+footer {
+    bottom: 0;
+}
+
+.details-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.details-title::before {
+    content: "\2726";
+    font-size: 11px;
+}
+
+.details-content {
+    font-size: 12.5px;
+    line-height: 1.48;
+    color: var(--bg-navy);
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* КАТЕГОРИИ */
+
+.category {
+    border-radius: 14px;
+    border: 1px solid var(--border-gold);
+    background: rgba(249, 246, 240, 0.65);
+    box-shadow: 0 3px 12px rgba(73, 83, 102, 0.06);
+    margin-bottom: 12px;
+    overflow: hidden;
+}
+
+.category-header {
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid rgba(211, 188, 142, 0.45);
+    outline: none;
+    background: linear-gradient(
+        90deg,
+        rgba(59, 66, 85, 0.96) 0%,
+        rgba(73, 83, 102, 0.92) 100%
+    );
+    color: var(--text-light);
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: background var(--transition-fast);
+}
+
+.category.collapsed .category-header {
+    border-bottom: none;
+}
+
+.category-header:hover {
+    background: linear-gradient(90deg, #2c3140 0%, #3b4255 100%);
+}
+
+.category-header-title-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: left;
+}
+
+.category-header-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold-bright);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.category-header-title::before {
+    content: "\2727";
+    font-size: 13px;
+}
+
+.category-header-subtitle {
+    font-size: 11px;
+    color: rgba(236, 229, 216, 0.75);
+}
+
+.category-header-chevron {
+    font-size: 12px;
+    color: var(--gold-bright);
+    transition: transform 140ms ease-out;
+}
+
+/* Тело категории */
+
+.category-body {
+    padding: 10px 12px 12px 12px;
+}
+
+/* Сворачивание / разворачивание */
+
+.category.collapsed .category-body {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding-top: 0;
+    padding-bottom: 0;
+    transition:
+        max-height 160ms ease-out,
+        opacity 160ms ease-out,
+        padding-top 160ms ease-out,
+        padding-bottom 160ms ease-out;
+}
+
+.category.expanded .category-body {
+    max-height: none;
+    opacity: 1;
+    overflow: visible;
+    transition:
+        opacity 160ms ease-out,
+        padding-top 160ms ease-out,
+        padding-bottom 160ms ease-out;
+}
+
+/* Поворот стрелки */
+
+.category.collapsed .category-header-chevron {
+    transform: rotate(-90deg);
+}
+
+.category.expanded .category-header-chevron {
+    transform: rotate(0deg);
+}
+
+/* Адаптив */
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .search-box input {
+        width: 120px;
+    }
+
+    main {
+        top: 115px;
+    }
+
+    footer {
+        flex-direction: column;
+        gap: 6px;
+        align-items: flex-start;
+    }
+
+    .card-inner {
+        grid-template-columns: 100px 1fr;
+    }
+}
+
+/* ==========================================================================
+   GENSHIN IMPACT — КАРКАС ПРИЛОЖЕНИЯ, САЙДБАР И МОДАЛЬНЫЕ ОКНА
+   ========================================================================== */
+
+* {
+    box-sizing: border-box !important;
+}
+
+html,
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    overflow: hidden !important;
+}
+
+/* Основной контейнер со светлым пергаментно-кремовым оттенком */
+.app-shell {
+    position: relative !important;
+    display: flex !important;
+    flex-direction: column !important;
+    height: 100vh !important;
+    width: 100vw !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: rgba(236, 229, 216, 0.88) !important;
+    backdrop-filter: blur(8px) !important;
+}
+
+/* Верхняя шапка строго 100px в стиле меню Тейвата */
+.app-shell > header {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    bottom: auto !important;
+    height: 100px !important;
+    min-height: 100px !important;
+    max-height: 100px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 24px !important;
+    margin: 0 !important;
+    background: linear-gradient(180deg, #f9f6f0 0%, #ede6d6 100%) !important;
+    border-bottom: 2px solid #d3bc8e !important;
+    box-shadow: 0 2px 12px rgba(158, 134, 88, 0.18) !important;
+    z-index: 10 !important;
+}
+
+.app-shell > header .brand-title {
+    color: #3b4255 !important;
+    text-shadow: none !important;
+}
+
+.app-shell > header .brand-dot {
+    background: #d3bc8e !important;
+    border: 1.5px solid #9e8658 !important;
+    transform: rotate(45deg) !important;
+    box-shadow: 0 0 8px rgba(211, 188, 142, 0.8) !important;
+}
+
+.app-shell > header .brand-subtitle {
+    color: #7c7465 !important;
+}
+
+.brand-version {
+    opacity: 0.75;
+    font-size: 0.65em;
+    letter-spacing: 0.05em;
+    color: #9e8658 !important;
+}
+
+/* Рабочая область ниже шапки */
+.workspace {
+    position: static !important;
+    display: flex !important;
+    flex-direction: row !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Левая панель вкладок (ширина 200px) — светлый телесно-пергаментный тон */
+.sidebar {
+    position: static !important;
+    width: 200px !important;
+    min-width: 200px !important;
+    max-width: 200px !important;
+    height: 100% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 8px !important;
+    padding: 16px 12px !important;
+    margin: 0 !important;
+    background: linear-gradient(180deg, #f5f0e6 0%, #e7decb 100%) !important;
+    border-right: 1.5px solid #d3bc8e !important;
+    overflow-y: auto !important;
+}
+
+.tab-btn {
+    position: relative !important;
+    width: 100% !important;
+    text-align: left !important;
+    padding: 11px 14px !important;
+    margin: 0 !important;
+    border-radius: 999px !important;
+    border: 1px solid rgba(158, 134, 88, 0.45) !important;
+    background: #f9f6f0 !important;
+    color: #495366 !important;
+    font-family: inherit !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    flex-shrink: 0 !important;
+    box-shadow: 0 2px 6px rgba(158, 134, 88, 0.1) !important;
+    transition:
+        transform 160ms ease-out,
+        border-color 160ms ease-out,
+        background 160ms ease-out,
+        color 160ms ease-out,
+        box-shadow 160ms ease-out !important;
+}
+
+.tab-btn:hover {
+    transform: translateX(2px);
+    border-color: #9e8658 !important;
+    background: #ffffff !important;
+    color: #3b4255 !important;
+    box-shadow: 0 4px 12px rgba(158, 134, 88, 0.25) !important;
+}
+
+.tab-btn.active {
+    border-color: #d3bc8e !important;
+    background: #3b4255 !important;
+    color: #ece5d8 !important;
+    font-weight: 700 !important;
+    box-shadow:
+        0 4px 12px rgba(59, 66, 85, 0.28),
+        inset 0 0 0 1px rgba(211, 188, 142, 0.45) !important;
+}
+
+/* Правая область отображения */
+main.tab-viewport {
+    position: static !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+    height: 100% !important;
+    padding: 20px 24px !important;
+    margin: 0 !important;
+    overflow-y: auto !important;
+    display: block !important;
+    background: rgba(243, 238, 227, 0.65) !important;
+}
+
+/* Нижний подвал */
+.app-shell > footer {
+    position: static !important;
+    height: 38px !important;
+    min-height: 38px !important;
+    max-height: 38px !important;
+    width: 100% !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 24px !important;
+    margin: 0 !important;
+    background: #ede6d6 !important;
+    border-top: 1.5px solid #d3bc8e !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    color: #5c5446 !important;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #495366 !important;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    transform: rotate(45deg);
+    background: #3ba55d;
+    box-shadow: 0 0 6px rgba(59, 165, 93, 0.7);
+}
+
+/* Кнопки управления сервером и добавления в шапке */
+.srv-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.srv-btn {
+    border-radius: 999px !important;
+    border: 1px solid #d3bc8e !important;
+    background: #f9f6f0 !important;
+    color: #3b4255 !important;
+    padding: 5px 12px !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    cursor: pointer !important;
+    box-shadow: 0 2px 5px rgba(158, 134, 88, 0.12) !important;
+    transition: all 160ms ease-out !important;
+}
+
+.srv-btn:hover {
+    background: #3b4255 !important;
+    border-color: #d3bc8e !important;
+    color: #e6cfa3 !important;
+    box-shadow: 0 3px 10px rgba(59, 66, 85, 0.25) !important;
+}
+
+.srv-btn.danger {
+    border-color: #c86d6d !important;
+    color: #9e3b33 !important;
+}
+
+.srv-btn.danger:hover {
+    background: #9e3b33 !important;
+    border-color: #9e3b33 !important;
+    color: #f9f6f0 !important;
+}
+
+/* ==========================================================================
+   ВСПЛЫВАЮЩИЕ УВЕДОМЛЕНИЯ (TOASTS) ВНИЗУ ЭКРАНА
+   ========================================================================== */
+.dock-toast-container {
+    position: fixed;
+    bottom: 48px;
+    left: 216px;
+    z-index: 11000;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 440px;
+    pointer-events: none;
+}
+
+.dock-toast {
+    pointer-events: auto;
+    background: rgba(249, 246, 240, 0.97) !important;
+    border: 1.5px solid #d3bc8e !important;
+    border-left: 5px solid #9e8658 !important;
+    border-radius: 12px !important;
+    padding: 10px 14px;
+    color: #3b4255 !important;
+    font-size: 12px;
+    line-height: 1.4;
+    box-shadow: 0 10px 28px rgba(73, 83, 102, 0.22) !important;
+    backdrop-filter: blur(6px);
+    animation: dockToastIn 0.2s ease-out;
+    word-break: break-all;
+}
+
+.dock-toast-title {
+    font-weight: 700;
+    color: #9e8658 !important;
+    margin-bottom: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dock-toast-close {
+    background: none;
+    border: none;
+    color: #848994;
+    cursor: pointer;
+    font-size: 13px;
+    padding: 0 0 0 8px;
+}
+
+.dock-toast-close:hover {
+    color: #3b4255;
+}
+
+@keyframes dockToastIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ==========================================================================
+   РЕЖИМ РЕДАКТИРОВАНИЯ ЛЕВОГО МЕНЮ (СОРТИРОВКА И ПЕРЕИМЕНОВАНИЕ ВКЛАДОК)
+   ========================================================================== */
+.sidebar-edit-bar {
+    display: flex;
+    gap: 6px;
+    padding-bottom: 8px;
+    margin-bottom: 2px;
+    border-bottom: 1px solid rgba(158, 134, 88, 0.45) !important;
+    flex-shrink: 0;
+}
+
+.sidebar-mode-btn {
+    flex: 1;
+    padding: 6px 8px;
+    border-radius: 999px !important;
+    border: 1px solid #d3bc8e !important;
+    background: #f9f6f0 !important;
+    color: #495366 !important;
+    font-size: 11.5px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 150ms ease;
+    text-align: center;
+}
+
+.sidebar-mode-btn:hover {
+    background: #3b4255 !important;
+    color: #e6cfa3 !important;
+}
+
+.sidebar-mode-btn.save {
+    border-color: #3ba55d !important;
+    background: rgba(59, 165, 93, 0.16) !important;
+    color: #246b3b !important;
+}
+
+.sidebar-mode-btn.save:hover {
+    background: #3ba55d !important;
+    color: #ffffff !important;
+}
+
+.tab-edit-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+    border-radius: 10px !important;
+    border: 1px solid #d3bc8e !important;
+    background: #f9f6f0 !important;
+    cursor: grab;
+    transition:
+        transform 120ms ease,
+        border-color 120ms ease,
+        opacity 120ms ease;
+    flex-shrink: 0;
+}
+
+.tab-edit-item.dragging {
+    opacity: 0.45;
+    border-style: dashed !important;
+    border-color: #9e8658 !important;
+}
+
+.tab-edit-item.drag-over-top {
+    box-shadow: 0 -2px 0 0 #9e8658 !important;
+}
+
+.tab-edit-item.drag-over-bottom {
+    box-shadow: 0 2px 0 0 #9e8658 !important;
+}
+
+.tab-drag-grip {
+    color: #9e8658 !important;
+    font-size: 12px;
+    user-select: none;
+    cursor: grab;
+    padding: 0 2px;
+}
+
+.tab-edit-input {
+    width: 100%;
+    min-width: 0;
+    background: #ffffff !important;
+    border: 1px solid #d3bc8e !important;
+    border-radius: 6px !important;
+    padding: 4px 6px;
+    color: #3b4255 !important;
+    font-family: inherit;
+    font-size: 12px;
+    outline: none;
+}
+
+.tab-edit-input:focus {
+    border-color: #9e8658 !important;
+}
+
+/* ==========================================================================
+КОРЗИНА ДЛЯ УДАЛЕНИЯ ВКЛАДОК В ЛЕВОМ МЕНЮ
+========================================================================== */
+
+.sidebar-trash-zone {
+    margin-top: auto;
+    padding: 14px 10px;
+    border-radius: 12px !important;
+    border: 1.5px dashed #c86d6d !important;
+    background: rgba(200, 109, 109, 0.1) !important;
+    color: #9e3b33 !important;
+    font-size: 12px;
+    font-weight: 600;
+    text-align: center;
+    user-select: none;
+    transition: all 160ms ease;
+    flex-shrink: 0;
+}
+.sidebar-trash-zone.drag-over {
+    border-color: #9e3b33 !important;
+    background: rgba(158, 59, 51, 0.2) !important;
+    color: #7a2620 !important;
+    transform: scale(1.02);
+    box-shadow: 0 4px 14px rgba(158, 59, 51, 0.25) !important;
+}
+/* Модальное окно удаления вкладки */
+.tab-del-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(44, 49, 64, 0.65) !important;
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 12000;
+    padding: 16px;
+}
+.tab-del-backdrop.open {
+    display: flex;
+}
+.tab-del-modal {
+    width: 440px;
+    max-width: 95vw;
+    background: #f9f6f0 !important;
+    border: 2px solid #d3bc8e !important;
+    border-radius: 16px !important;
+    padding: 20px;
+    box-shadow: 0 20px 50px rgba(44, 49, 64, 0.35) !important;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    color: #3b4255 !important;
+}
+.tab-del-modal h3 {
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #9e8658 !important;
+}
+.tab-del-box {
+    padding: 12px;
+    border-radius: 12px !important;
+    background: #ece5d8 !important;
+    border: 1px solid #d3bc8e !important;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.tab-del-box.danger {
+    border-color: #c86d6d !important;
+    background: rgba(200, 109, 109, 0.1) !important;
+}
+.tab-del-input {
+    width: 100%;
+    background: #ffffff !important;
+    border: 1px solid #d3bc8e !important;
+    border-radius: 8px !important;
+    padding: 8px 10px;
+    color: #3b4255 !important;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+}
+.tab-del-input:focus {
+    border-color: #9e8658 !important;
+}
+.tab-del-btn-trash {
+    padding: 8px 12px;
+    border-radius: 999px !important;
+    border: 1px solid #d3bc8e !important;
+    background: #3b4255 !important;
+    color: #e6cfa3 !important;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: all 150ms;
+}
+.tab-del-btn-trash:hover {
+    background: #2c3140 !important;
+    color: #ffffff !important;
+}
+.tab-del-btn-perm {
+    padding: 8px 12px;
+    border-radius: 999px !important;
+    border: 1px solid #9e3b33 !important;
+    background: #9e3b33 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+    font-size: 12.5px;
+    cursor: pointer;
+    transition:
+        opacity 150ms,
+        box-shadow 150ms;
+}
+.tab-del-btn-perm:disabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+.tab-del-btn-perm:not(:disabled):hover {
+    box-shadow: 0 4px 12px rgba(158, 59, 51, 0.4) !important;
+}

@@ -1,5 +1,56 @@
 window.CURRENT_TAB_DIR = '';
 
+/**
+ * Выбирает случайную строку из массива, исключая ту, что показывалась
+ * при прошлой загрузке страницы (если в списке больше 1 элемента).
+ */
+function pickRandomSubtitle(subtitles) {
+  if (!Array.isArray(subtitles) || subtitles.length === 0) return null;
+  if (subtitles.length === 1) return subtitles[0];
+
+  const STORAGE_KEY = 'hp_last_subtitle';
+  const lastSubtitle = localStorage.getItem(STORAGE_KEY);
+
+  // Отфильтровываем прошлую фразу, чтобы гарантированно выпала новая
+  const candidates = subtitles.filter((text) => text !== lastSubtitle);
+  const chosen = candidates[Math.floor(Math.random() * candidates.length)];
+
+  localStorage.setItem(STORAGE_KEY, chosen);
+  return chosen;
+}
+
+/**
+ * Загружает название, версию и случайный подзаголовок из config.py
+ */
+async function syncAppInfo() {
+  try {
+    const res = await fetch('/api/app-info');
+    if (!res.ok) return;
+    const info = await res.json();
+
+    if (info.full_title) {
+      document.title = info.full_title;
+    }
+
+    const nameEl = document.getElementById('app-brand-name');
+    const verEl = document.getElementById('app-brand-version');
+    const subEl = document.getElementById('app-brand-subtitle');
+
+    if (nameEl && info.name) nameEl.textContent = info.name;
+    if (verEl && info.version) verEl.textContent = info.version;
+
+    const nextSubtitle = pickRandomSubtitle(info.subtitles);
+    if (subEl && nextSubtitle) {
+      subEl.textContent = nextSubtitle;
+    }
+  } catch (e) {
+    // Если сервер недоступен, оставляем стандартный текст из HTML
+  }
+}
+
+syncAppInfo();
+
+
 // Хелпер: превращает имя файла ("google.png") в путь внутри папки текущей вкладки, а URL оставляет как есть
 window.resolveTabAsset = function(iconValue, tabDir = window.CURRENT_TAB_DIR) {
   if (!iconValue) return '';
@@ -467,7 +518,7 @@ document.addEventListener('DOMContentLoaded', () => {
     trashBtn.onclick = () => executeDelete('trash');
     permBtn.onclick = () => executeDelete('permanent');
   }
-  
+
   async function initTabs() {
     try {
       const res = await fetch('/api/tabs');

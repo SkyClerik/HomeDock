@@ -487,3 +487,108 @@
   border-color: #f59e0b;
   color: #fbbf24;
 }
+
+
+/* =========================================================================
+   КОМПАКТНЫЙ РЕЖИМ ДЕРЕВА (ВЕРТИКАЛЬНАЯ ПОЛОСКА НА 4 СИМВОЛА)
+   ========================================================================= */
+
+.hp-workspace {
+  transition: grid-template-columns 0.2s ease;
+}
+
+.hp-workspace.tree-compact {
+  grid-template-columns: 66px 1fr;
+}
+
+/* Шапка дерева в компактном режиме */
+.hp-workspace.tree-compact .hp-pane-header {
+  padding: 10px 6px;
+  justify-content: center;
+}
+
+.hp-workspace.tree-compact .hp-header-left,
+.hp-workspace.tree-compact .hp-header-actions > button:not(#hp-toggle-compact-btn) {
+  display: none;
+}
+
+.hp-workspace.tree-compact .hp-header-actions {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Список и строки в виде плиток */
+.hp-workspace.tree-compact .hp-tree-list {
+  padding: 8px 6px;
+  align-items: center;
+  gap: 6px;
+}
+
+.hp-workspace.tree-compact .hp-tree-row {
+  width: 48px;
+  height: 38px;
+  padding: 0 2px !important;
+  justify-content: center;
+  position: relative;
+  border-radius: 8px;
+  border-left-width: 1px !important;
+  background: var(--node-color, rgba(255, 255, 255, 0.08));
+}
+
+.hp-workspace.tree-compact .hp-tree-row:hover {
+  transform: scale(1.05);
+  filter: brightness(1.15);
+}
+
+.hp-workspace.tree-compact .hp-tree-row.selected {
+  box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f59e0b;
+}
+
+/* Скрываем лишние текстовые элементы внутри плитки */
+.hp-workspace.tree-compact .hp-toggle-arrow,
+.hp-workspace.tree-compact .hp-row-checkbox,
+.hp-workspace.tree-compact .hp-row-title,
+.hp-workspace.tree-compact .hp-row-type-badge,
+.hp-workspace.tree-compact .hp-row-tags,
+.hp-workspace.tree-compact .hp-progress-track,
+.hp-workspace.tree-compact .hp-row-actions {
+  display: none;
+}
+
+/* Короткий текст (4 символа) по центру плитки */
+.hp-compact-badge {
+  display: none;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #ffffff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.75);
+  white-space: nowrap;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hp-workspace.tree-compact .hp-compact-badge {
+  display: block;
+}
+
+/* Индикатор вложенности (точка в правом нижнем углу плитки, если есть дети) */
+.hp-workspace.tree-compact .hp-tree-row.has-children::after {
+  content: "";
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.8);
+}
+
+/* На узких экранах (половина монитора) в компактном режиме оставляем 2 колонки */
+@media (max-width: 980px) {
+  .hp-workspace.tree-compact {
+    grid-template-columns: 66px 1fr;
+    height: calc(100vh - 165px);
+  }
+}

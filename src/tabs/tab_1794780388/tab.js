@@ -47,6 +47,36 @@
   headerActions.insertBefore(btnPasteHeader, headerActions.firstChild);
   headerActions.insertBefore(btnCopyHeader, headerActions.firstChild);
 
+  // Инициализация кнопки сворачивания дерева в компактную вертикальную полоску
+  function initCompactToggle() {
+    const workspace = document.querySelector(".hp-workspace");
+    if (!workspace || !headerActions) return;
+
+    const btnCompact = document.createElement("button");
+    btnCompact.type = "button";
+    btnCompact.id = "hp-toggle-compact-btn";
+    btnCompact.className = "hp-btn";
+    btnCompact.title = "Свернуть дерево в компактную полоску";
+    btnCompact.textContent = "◧";
+
+    headerActions.appendChild(btnCompact);
+
+    const COMPACT_STORAGE_KEY = "hp_tree_compact_mode";
+    if (localStorage.getItem(COMPACT_STORAGE_KEY) === "1") {
+      workspace.classList.add("tree-compact");
+      btnCompact.classList.add("active");
+    }
+
+    btnCompact.addEventListener("click", () => {
+      const isCompact = workspace.classList.toggle("tree-compact");
+      btnCompact.classList.toggle("active", isCompact);
+      btnCompact.title = isCompact
+        ? "Развернуть структуру проекта"
+        : "Свернуть дерево в компактную полоску";
+      localStorage.setItem(COMPACT_STORAGE_KEY, isCompact ? "1" : "0");
+    });
+  }
+
   async function loadData() {
     try {
       const res = await fetch(DATA_URL);
@@ -193,6 +223,7 @@
     });
   }
 
+
   function escapeHtml(str) {
     return String(str)
       .replace(/&/g, "&amp;")
@@ -202,211 +233,243 @@
       .replace(/'/g, "&#39;");
   }
 
+  // =========================================================================
+  // ОТРИСОВКА ДЕРЕВА ЭЛЕМЕНТОВ
+  // =========================================================================
+
   function renderTree() {
     const searchVal = (document.getElementById("search-input")?.value || "")
       .toLowerCase()
       .trim();
     treeRoot.innerHTML = "";
 
-    function buildLevel(nodes, depth) {
-      for (const node of nodes) {
-        const hasChildren =
-          Array.isArray(node.children) && node.children.length > 0;
-        const progress = calcProgress(node);
+    renderTreeLevel(treeData, 0, searchVal);
 
-        const row = document.createElement("div");
-        row.className =
-          "hp-tree-row card-item" + (node.id === selectedId ? " selected" : "");
-        row.style.paddingLeft = 10 + depth * 20 + "px";
-        row.draggable = true;
-
-        if (node.color) {
-          row.style.borderLeft = "4px solid " + node.color;
-        }
-
-        const matchesSearch =
-          !searchVal ||
-          (node.title || "").toLowerCase().includes(searchVal) ||
-          (node.type || "").toLowerCase().includes(searchVal) ||
-          (node.tags || "").toLowerCase().includes(searchVal) ||
-          (node.markdown || "").toLowerCase().includes(searchVal);
-
-        if (!matchesSearch) {
-          row.style.display = "none";
-        }
-
-        const tagList = (node.tags || "")
-          .split(",")
-          .map((t) => t.trim())
-          .filter(Boolean);
-        const tagsHtml = tagList.length
-          ? '<div class="hp-row-tags">' +
-            tagList
-              .map(
-                (t) =>
-                  '<span class="hp-tag-pill">#' + escapeHtml(t) + "</span>",
-              )
-              .join("") +
-            "</div>"
-          : "";
-
-        const showCb = node.showCheckbox !== false;
-        const arrowClass = hasChildren ? "" : "empty";
-        const arrowChar = node.expanded !== false ? "▾" : "▸";
-        const checkedAttr = node.done ? "checked" : "";
-        const titleClass = node.done && showCb ? "done" : "";
-        const checkboxHtml = showCb
-          ? '<input type="checkbox" class="hp-row-checkbox" ' +
-            checkedAttr +
-            ">"
-          : "";
-        const badgeHtml = node.type
-          ? '<span class="hp-row-type-badge">' +
-            escapeHtml(node.type) +
-            "</span>"
-          : "";
-        const pasteBtnHtml = clipboardNode
-          ? '<button type="button" class="hp-row-add-child" data-act="paste" title="Вставить из буфера внутрь">📥</button>'
-          : "";
-
-        row.innerHTML =
-          '<span class="hp-toggle-arrow ' +
-          arrowClass +
-          '">' +
-          arrowChar +
-          "</span>" +
-          checkboxHtml +
-          '<span class="hp-row-title ' +
-          titleClass +
-          '">' +
-          escapeHtml(node.title || "Без названия") +
-          "</span>" +
-          badgeHtml +
-          tagsHtml +
-          '<div class="hp-progress-track" title="Выполнено: ' +
-          progress +
-          '%">' +
-          '<div class="hp-progress-fill" style="width: ' +
-          progress +
-          '%;"></div>' +
-          "</div>" +
-          '<div class="hp-row-actions">' +
-          '<button type="button" class="hp-row-add-child" data-act="copy" title="Копировать ветку в буфер">📋</button>' +
-          pasteBtnHtml +
-          '<button type="button" class="hp-row-add-child" data-act="add" title="Добавить вложенный элемент">+</button>' +
-          "</div>";
-
-        // Drag & Drop события для строки
-        row.addEventListener("dragstart", (e) => {
-          e.stopPropagation();
-          draggedNodeId = node.id;
-          e.dataTransfer.effectAllowed = "move";
-        });
-
-        row.addEventListener("dragend", () => {
-          draggedNodeId = null;
-          document
-            .querySelectorAll(".drag-over")
-            .forEach((el) => el.classList.remove("drag-over"));
-        });
-
-        row.addEventListener("dragover", (e) => {
-          if (!draggedNodeId || draggedNodeId === node.id) return;
-          const draggedNode = findNode(treeData, draggedNodeId);
-          if (draggedNode && isDescendant(draggedNode, node.id)) return;
-          e.preventDefault();
-          e.stopPropagation();
-          row.classList.add("drag-over");
-        });
-
-        row.addEventListener("dragleave", () => {
-          row.classList.remove("drag-over");
-        });
-
-        row.addEventListener("drop", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          row.classList.remove("drag-over");
-          if (!draggedNodeId || draggedNodeId === node.id) return;
-          const draggedNode = findNode(treeData, draggedNodeId);
-          if (!draggedNode || isDescendant(draggedNode, node.id)) return;
-
-          const moved = extractNodeById(treeData, draggedNodeId);
-          if (moved) {
-            if (!Array.isArray(node.children)) node.children = [];
-            node.children.push(moved);
-            node.expanded = true;
-            renderTree();
-            scheduleSave();
-          }
-          draggedNodeId = null;
-        });
-
-        // Сворачивание ветки
-        row.querySelector(".hp-toggle-arrow").addEventListener("click", (e) => {
-          e.stopPropagation();
-          node.expanded = node.expanded === false ? true : false;
-          renderTree();
-          scheduleSave();
-        });
-
-        const rowCb = row.querySelector(".hp-row-checkbox");
-        if (rowCb) {
-          rowCb.addEventListener("change", (e) => {
-            e.stopPropagation();
-            node.done = e.target.checked;
-            if (node.id === selectedId) {
-              fieldDone.checked = node.done;
-              doneText.textContent = node.done ? "Выполнено" : "В работе";
-            }
-            renderTree();
-            scheduleSave();
-          });
-        }
-
-        row.querySelectorAll(".hp-row-add-child").forEach((btn) => {
-          btn.style.opacity = "1";
-          btn.addEventListener("click", (e) => {
-            e.stopPropagation();
-            const act = btn.dataset.act;
-            if (act === "copy") {
-              copyNodeToClipboard(node);
-            } else if (act === "paste") {
-              pasteFromClipboard(node);
-            } else if (act === "add") {
-              if (!Array.isArray(node.children)) node.children = [];
-              const newNode = createNewNode("Новый подэлемент");
-              node.children.push(newNode);
-              node.expanded = true;
-              selectedId = newNode.id;
-              isEditMode = true;
-              renderTree();
-              renderInspector();
-              scheduleSave();
-              fieldTitle.focus();
-              fieldTitle.select();
-            }
-          });
-        });
-
-        row.addEventListener("click", () => {
-          selectedId = node.id;
-          renderTree();
-          renderInspector();
-        });
-
-        treeRoot.appendChild(row);
-
-        if (hasChildren && (node.expanded !== false || searchVal)) {
-          buildLevel(node.children, depth + 1);
-        }
-      }
-    }
-
-    buildLevel(treeData, 0);
     if (typeof window.updateDockCounter === "function") {
       window.updateDockCounter();
     }
+  }
+
+  function renderTreeLevel(nodes, depth, searchVal) {
+    for (const node of nodes) {
+      const hasChildren =
+        Array.isArray(node.children) && node.children.length > 0;
+      const row = createTreeRow(node, depth, searchVal, hasChildren);
+
+      treeRoot.appendChild(row);
+
+      if (hasChildren && (node.expanded !== false || searchVal)) {
+        renderTreeLevel(node.children, depth + 1, searchVal);
+      }
+    }
+  }
+
+  function createTreeRow(node, depth, searchVal, hasChildren) {
+    const progress = calcProgress(node);
+    const row = document.createElement("div");
+
+    row.className =
+      "hp-tree-row card-item" + (node.id === selectedId ? " selected" : "");
+    if (hasChildren) {
+      row.classList.add("has-children");
+    }
+
+    row.style.paddingLeft = 10 + depth * 20 + "px";
+    row.draggable = true;
+
+    if (node.color) {
+      row.style.borderLeft = "4px solid " + node.color;
+      row.style.setProperty("--node-color", node.color);
+    }
+
+    // Всплывающая подсказка для компактного режима
+    const indentPrefix = depth > 0 ? "↳ ".repeat(depth) : "";
+    row.title = `${indentPrefix}${node.title || "Без названия"}${node.type ? " [" + node.type + "]" : ""}`;
+
+    // Фильтрация по поиску
+    const matchesSearch =
+      !searchVal ||
+      (node.title || "").toLowerCase().includes(searchVal) ||
+      (node.type || "").toLowerCase().includes(searchVal) ||
+      (node.tags || "").toLowerCase().includes(searchVal) ||
+      (node.markdown || "").toLowerCase().includes(searchVal);
+
+    if (!matchesSearch) {
+      row.style.display = "none";
+    }
+
+    // Подготовка HTML-фрагментов строки
+    const cleanTitle = (node.title || "••••").trim();
+    const shortLabel = Array.from(cleanTitle).slice(0, 4).join("");
+
+    const tagList = (node.tags || "")
+      .split(",")
+      .map((t) => t.trim())
+      .filter(Boolean);
+    const tagsHtml = tagList.length
+      ? '<div class="hp-row-tags">' +
+        tagList
+          .map(
+            (t) => '<span class="hp-tag-pill">#' + escapeHtml(t) + "</span>",
+          )
+          .join("") +
+        "</div>"
+      : "";
+
+    const showCb = node.showCheckbox !== false;
+    const arrowClass = hasChildren ? "" : "empty";
+    const arrowChar = node.expanded !== false ? "▾" : "▸";
+    const checkedAttr = node.done ? "checked" : "";
+    const titleClass = node.done && showCb ? "done" : "";
+    const checkboxHtml = showCb
+      ? '<input type="checkbox" class="hp-row-checkbox" ' + checkedAttr + ">"
+      : "";
+    const badgeHtml = node.type
+      ? '<span class="hp-row-type-badge">' + escapeHtml(node.type) + "</span>"
+      : "";
+    const pasteBtnHtml = clipboardNode
+      ? '<button type="button" class="hp-row-add-child" data-act="paste" title="Вставить из буфера внутрь">📥</button>'
+      : "";
+
+    row.innerHTML =
+      '<span class="hp-compact-badge">' +
+      escapeHtml(shortLabel) +
+      "</span>" +
+      '<span class="hp-toggle-arrow ' +
+      arrowClass +
+      '">' +
+      arrowChar +
+      "</span>" +
+      checkboxHtml +
+      '<span class="hp-row-title ' +
+      titleClass +
+      '">' +
+      escapeHtml(node.title || "Без названия") +
+      "</span>" +
+      badgeHtml +
+      tagsHtml +
+      '<div class="hp-progress-track" title="Выполнено: ' +
+      progress +
+      '%">' +
+      '<div class="hp-progress-fill" style="width: ' +
+      progress +
+      '%;"></div>' +
+      "</div>" +
+      '<div class="hp-row-actions">' +
+      '<button type="button" class="hp-row-add-child" data-act="copy" title="Копировать ветку в буфер">📋</button>' +
+      pasteBtnHtml +
+      '<button type="button" class="hp-row-add-child" data-act="add" title="Добавить вложенный элемент">+</button>' +
+      "</div>";
+
+    attachRowDragEvents(row, node);
+    attachRowActionEvents(row, node);
+
+    return row;
+  }
+
+  function attachRowDragEvents(row, node) {
+    row.addEventListener("dragstart", (e) => {
+      e.stopPropagation();
+      draggedNodeId = node.id;
+      e.dataTransfer.effectAllowed = "move";
+    });
+
+    row.addEventListener("dragend", () => {
+      draggedNodeId = null;
+      document
+        .querySelectorAll(".drag-over")
+        .forEach((el) => el.classList.remove("drag-over"));
+    });
+
+    row.addEventListener("dragover", (e) => {
+      if (!draggedNodeId || draggedNodeId === node.id) return;
+      const draggedNode = findNode(treeData, draggedNodeId);
+      if (draggedNode && isDescendant(draggedNode, node.id)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      row.classList.add("drag-over");
+    });
+
+    row.addEventListener("dragleave", () => {
+      row.classList.remove("drag-over");
+    });
+
+    row.addEventListener("drop", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      row.classList.remove("drag-over");
+      if (!draggedNodeId || draggedNodeId === node.id) return;
+      const draggedNode = findNode(treeData, draggedNodeId);
+      if (!draggedNode || isDescendant(draggedNode, node.id)) return;
+
+      const moved = extractNodeById(treeData, draggedNodeId);
+      if (moved) {
+        if (!Array.isArray(node.children)) node.children = [];
+        node.children.push(moved);
+        node.expanded = true;
+        renderTree();
+        scheduleSave();
+      }
+      draggedNodeId = null;
+    });
+  }
+
+  function attachRowActionEvents(row, node) {
+    // Сворачивание ветки по стрелке
+    row.querySelector(".hp-toggle-arrow").addEventListener("click", (e) => {
+      e.stopPropagation();
+      node.expanded = node.expanded === false ? true : false;
+      renderTree();
+      scheduleSave();
+    });
+
+    // Чекбокс выполнения
+    const rowCb = row.querySelector(".hp-row-checkbox");
+    if (rowCb) {
+      rowCb.addEventListener("change", (e) => {
+        e.stopPropagation();
+        node.done = e.target.checked;
+        if (node.id === selectedId) {
+          fieldDone.checked = node.done;
+          doneText.textContent = node.done ? "Выполнено" : "В работе";
+        }
+        renderTree();
+        scheduleSave();
+      });
+    }
+
+    // Кнопки действий (копировать, вставить, добавить подэлемент)
+    row.querySelectorAll(".hp-row-add-child").forEach((btn) => {
+      btn.style.opacity = "1";
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const act = btn.dataset.act;
+        if (act === "copy") {
+          copyNodeToClipboard(node);
+        } else if (act === "paste") {
+          pasteFromClipboard(node);
+        } else if (act === "add") {
+          if (!Array.isArray(node.children)) node.children = [];
+          const newNode = createNewNode("Новый подэлемент");
+          node.children.push(newNode);
+          node.expanded = true;
+          selectedId = newNode.id;
+          isEditMode = true;
+          renderTree();
+          renderInspector();
+          scheduleSave();
+          fieldTitle.focus();
+          fieldTitle.select();
+        }
+      });
+    });
+
+    // Выбор элемента по клику на строку
+    row.addEventListener("click", () => {
+      selectedId = node.id;
+      renderTree();
+      renderInspector();
+    });
   }
 
   function renderInspector() {
@@ -671,5 +734,6 @@
       scheduleSave();
     });
 
+  initCompactToggle();
   await loadData();
 })();

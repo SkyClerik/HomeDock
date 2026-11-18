@@ -205,6 +205,14 @@ def run_update():
     res_tabs_dir = os.path.join(result_dir, 'tabs')
     os.makedirs(res_tabs_dir, exist_ok=True)
 
+    # 4. Индексируем шаблоны новой версии и пересобираем вкладки пользователя
+    templates_index = build_template_index(os.path.join(result_dir, 'templates'))
+    print(f"[3/4] Доступные шаблоны в новой версии: {list(templates_index.keys())}")
+
+    old_tabs_dir = os.path.join(old_proj['path'], 'tabs')
+    res_tabs_dir = os.path.join(result_dir, 'tabs')
+    os.makedirs(res_tabs_dir, exist_ok=True)
+
     if os.path.isdir(old_tabs_dir):
         for folder in sorted(os.listdir(old_tabs_dir)):
             old_tab_path = os.path.join(old_tabs_dir, folder)
@@ -238,7 +246,9 @@ def run_update():
                 shutil.copytree(old_tab_path, new_tab_path, dirs_exist_ok=True)
                 print(f"  -> Вкладка '{folder}' перенесена без изменений (шаблон не найден).")
 
-                print(f"\n[4/4] Готово! Полностью рабочая обновленная версия находится в:\n{result_dir}")
-                if name == 'main':
-                run_update()
-                input("\nНажмите Enter для выхода...")
+    print(f"\n[4/4] Готово! Полностью рабочая обновленная версия находится в:\n{result_dir}")
+
+
+if __name__ == '__main__':
+    run_update()
+    input("\nНажмите Enter для выхода...")

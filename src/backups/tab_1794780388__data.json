@@ -1,0 +1,39 @@
+[
+  {
+    "id": "node_locations",
+    "title": "Folder: Locations",
+    "type": "Folder",
+    "startDate": "11.11.2026",
+    "dueDate": "",
+    "done": false,
+    "expanded": false,
+    "markdown": "### Локации игрового мира\n\nОсновной раздел с описанием ключевых зон и уровней.",
+    "children": [
+      {
+        "id": "node_ship",
+        "title": "Location: The ship",
+        "type": "note",
+        "startDate": "11.11.2026",
+        "dueDate": "",
+        "done": false,
+        "expanded": false,
+        "markdown": "### Космический корабль\n\nСтартовая локация игрока.\n\n- [x] Мостик капитана\n- [x] Жилой отсек\n- [ ] Машинное отделение",
+        "children": [],
+        "color": "#f59e0b"
+      },
+      {
+        "id": "node_moon",
+        "title": "Location: Moon Colony",
+        "type": "note",
+        "startDate": "11.11.2026",
+        "dueDate": "",
+        "done": false,
+        "expanded": false,
+        "markdown": "### Лунная колония\n\nНаучный комплекс, где живут и работают исследователи.\n\n- Лаборатории\n- Подземный завод\n- Космопорт",
+        "children": []
+      }
+    ],
+    "color": "#22c55e",
+    "showCheckbox": false
+  }
+]

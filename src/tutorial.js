@@ -15,12 +15,28 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Если уже читали — просто выходим
   if (settings.tutorialRead === true) return;
 
-  // 2. Создаем и показываем модальное окно с текстом
+  // 2. Подтягиваем название и версию проекта из config.py
+  let appTitle = 'Home Dock';
+  try {
+    const infoRes = await fetch('/api/app-info');
+    if (infoRes.ok) {
+      const info = await infoRes.json();
+      if (info.name && info.version) {
+        appTitle = `${info.name} ${info.version}`;
+      } else if (info.full_title) {
+        appTitle = info.full_title;
+      }
+    }
+  } catch (e) {
+    // Оставляем запасное название при ошибке сети
+  }
+
+  // 3. Создаем и показываем модальное окно с текстом
   const modal = document.createElement('div');
   modal.className = 'settings-modal-backdrop open';
   modal.innerHTML = `
     <div class="settings-modal" style="max-width: 540px;">
-      <h3>👋 Добро пожаловать в Home Dock v2</h3>
+      <h3>👋 Добро пожаловать в ${appTitle}</h3>
 
       <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; line-height: 1.5; color: #cbd5e1; margin: 14px 0;">
         <div><b>📑 Вкладки:</b> Переключайтесь в левом меню или создавайте новые из шаблонов через кнопку <b>📑</b> в шапке.</div>
@@ -38,7 +54,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   `;
   document.body.appendChild(modal);
 
-  // 3. При закрытии записываем флаг в settings.json
+  // 4. При закрытии записываем флаг в settings.json
   document.getElementById('tut-close-btn').addEventListener('click', async () => {
     modal.remove();
     try {

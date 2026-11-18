@@ -104,7 +104,6 @@ class HomeDockHandler(http.server.SimpleHTTPRequestHandler):
             templates = self._get_templates()
             self.send_json(templates)
 
-
         # 5. Отдача локальной картинки с любого диска ПК
         elif parsed.path == '/api/local-image':
             self._serve_local_image(parsed.query)

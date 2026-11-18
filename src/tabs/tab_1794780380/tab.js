@@ -48,15 +48,12 @@
     }
     const val = iconVal.trim();
     const isWeb = /^(https?:\/\/|data:)/i.test(val);
-    const isLocalPath = /^[a-zA-Z]:[\\/]/.test(val) || val.startsWith('\\\\') || val.includes('\\') || val.includes('/') || /\.(png|jpe?g|gif|webp|svg|ico)$/i.test(val);
+    const isImage = isWeb || /\.(png|jpe?g|gif|webp|svg|ico)$/i.test(val);
 
-    if (isWeb) {
-      return `<img src="${val}" referrerpolicy="no-referrer" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-              <div class="card-thumb-fallback" style="display:none;">${fallbackLetter}</div>`;
-    }
-    if (isLocalPath) {
-      const encoded = encodeURIComponent(val);
-      return `<img src="/api/local-image?path=${encoded}" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+    if (isImage) {
+      // Если это веб-ссылка — берем как есть, если файл — берем из папки текущего таба
+      const src = isWeb ? val : `${TAB_DIR}/${val.replace(/\\/g, '/').replace(/^\/+/, '')}`;
+      return `<img src="${src}" referrerpolicy="no-referrer" alt="" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
               <div class="card-thumb-fallback" style="display:none;">${fallbackLetter}</div>`;
     }
     return `<div class="card-thumb-fallback">${val.slice(0, 3)}</div>`;
@@ -392,7 +389,19 @@
         });
         const data = await res.json();
         if (data.status === 'ok' && data.path) {
-          targetInput.value = data.path;
+          let chosenPath = data.path;
+
+          // Если выбираем картинку — обрезаем полный путь до относительного внутри папки таба
+          if (mode === 'img') {
+            const normFull = chosenPath.replace(/\\/g, '/');
+            const normTab = TAB_DIR.replace(/\\/g, '/').replace(/^\/+/, '') + '/';
+            const idx = normFull.toLowerCase().indexOf(normTab.toLowerCase());
+            if (idx !== -1) {
+              chosenPath = chosenPath.slice(idx + normTab.length);
+            }
+          }
+
+          targetInput.value = chosenPath;
         }
       } catch (e) {
         showDockAlert('Не удалось открыть окно выбора: нет связи с server.py');

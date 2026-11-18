@@ -3,7 +3,7 @@
 # Метаданные приложения
 APP_AUTHOR = "SkyClerik"
 APP_NAME = "Home DOCK"
-APP_VERSION = "v2.1.3"
+APP_VERSION = "v2.1.4"
 APP_FULL_TITLE = f"{APP_AUTHOR} {APP_NAME} {APP_VERSION}"
 
 # Сетевые настройки

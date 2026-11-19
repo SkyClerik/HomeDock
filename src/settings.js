@@ -8,6 +8,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     theme: 'styles-gx.css'
   };
 
+  // Передает имя файла активной темы всем вкладкам
+  function broadcastThemeChange(themeFileName) {
+    window.CURRENT_THEME = themeFileName;
+    window.dispatchEvent(new CustomEvent('dock-theme-changed', {
+      detail: { theme: themeFileName }
+    }));
+  }
+
   // Генерируем разметку модального окна настроек автоматически
   const modalBackdrop = document.createElement('div');
   modalBackdrop.className = 'settings-modal-backdrop';
@@ -50,6 +58,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
     if (themeLink && currentSettings.theme) {
       themeLink.href = currentSettings.theme;
+      broadcastThemeChange(currentSettings.theme);
     }
     window.DOCK_SETTINGS = currentSettings;
   }
@@ -66,20 +75,23 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Предпросмотр темы сразу при смене в списке
   themeSelect.addEventListener('change', () => {
-    if (themeLink) themeLink.href = themeSelect.value;
+    if (themeLink) {
+      themeLink.href = themeSelect.value;
+      broadcastThemeChange(themeSelect.value);
+    }
   });
 
   // Отмена (возвращаем старую тему, если меняли для предпросмотра)
   document.getElementById('cfg-cancel').addEventListener('click', () => {
     if (themeLink && currentSettings.theme) {
       themeLink.href = currentSettings.theme;
+      broadcastThemeChange(currentSettings.theme);
     }
     modalBackdrop.classList.remove('open');
   });
 
   // Сохранение в settings.json
   document.getElementById('cfg-save').addEventListener('click', async () => {
-    // Сначала перечитываем актуальный файл, чтобы не потерять tutorialRead и другие поля
     try {
       const freshRes = await fetch(SETTINGS_FILE);
       if (freshRes.ok) {

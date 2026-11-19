@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <option value="styles-genshin.css">Genshin</option>
           <option value="styles-nier.css">Nier Automata</option>
           <option value="styles-ubuntu.css">Ubuntu</option>
+          <option value="styles-linux-mint.css">Mint</option>
         </select>
       </div>
 

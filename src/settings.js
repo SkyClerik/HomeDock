@@ -5,8 +5,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const statusText = document.getElementById('status-text');
 
   let currentSettings = {
-    theme: 'styles-gx.css',
-    serverStartPath: 'start.bat'
+    theme: 'styles-gx.css'
   };
 
   // Генерируем разметку модального окна настроек автоматически
@@ -28,17 +27,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         </select>
       </div>
 
-      <div class="settings-group">
-        <label>Путь запуска сервера (только .bat, .cmd, .py)</label>
-        <div class="settings-path-row">
-          <input type="text" id="cfg-server-path" placeholder="H:\\HomeDock_v2\\start.bat">
-          <button type="button" class="settings-pick-btn" id="cfg-pick-server">📁 Файл</button>
-        </div>
-        <div class="settings-hint">
-          Используется как справочный путь для перезапуска сервера, если процесс был остановлен.
-        </div>
-      </div>
-
       <div class="settings-footer">
         <button type="button" class="srv-btn" id="cfg-cancel">Отмена</button>
         <button type="button" class="settings-save-btn" id="cfg-save">💾 Сохранить</button>
@@ -48,8 +36,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   document.body.appendChild(modalBackdrop);
 
   const themeSelect = document.getElementById('cfg-theme');
-  const serverPathInput = document.getElementById('cfg-server-path');
-  const pickServerBtn = document.getElementById('cfg-pick-server');
 
   // Загрузка настроек из settings.json
   async function loadSettings() {
@@ -74,7 +60,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (openBtn) {
     openBtn.addEventListener('click', () => {
       themeSelect.value = currentSettings.theme || 'styles-gx.css';
-      serverPathInput.value = currentSettings.serverStartPath || '';
       modalBackdrop.classList.add('open');
     });
   }
@@ -82,31 +67,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   // Предпросмотр темы сразу при смене в списке
   themeSelect.addEventListener('change', () => {
     if (themeLink) themeLink.href = themeSelect.value;
-  });
-
-  // Выбор файла запуска сервера с ограничением расширений (.bat, .cmd, .py)
-  pickServerBtn.addEventListener('click', async () => {
-    pickServerBtn.disabled = true;
-    try {
-      const res = await fetch('/api/pick-path', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mode: 'server' })
-      });
-      const data = await res.json();
-      if (data.status === 'ok' && data.path) {
-        const ext = data.path.split('.').pop().toLowerCase();
-        if (!['bat', 'cmd', 'py'].includes(ext)) {
-          alert('Недопустимый формат файла! Выберите .bat, .cmd или .py');
-          return;
-        }
-        serverPathInput.value = data.path;
-      }
-    } catch (e) {
-      alert('Нет связи с server.py');
-    } finally {
-      pickServerBtn.disabled = false;
-    }
   });
 
   // Отмена (возвращаем старую тему, если меняли для предпросмотра)
@@ -119,16 +79,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Сохранение в settings.json
   document.getElementById('cfg-save').addEventListener('click', async () => {
-    const rawPath = serverPathInput.value.trim();
-    if (rawPath) {
-      const ext = rawPath.split('.').pop().toLowerCase();
-      if (!['bat', 'cmd', 'py'].includes(ext)) {
-        alert('Путь запуска сервера должен указывать на файл .bat, .cmd или .py');
-        return;
-      }
-    }
-
-    // Сначала перечитываем актуальный файл, чтобы не потерять tutorialRead
+    // Сначала перечитываем актуальный файл, чтобы не потерять tutorialRead и другие поля
     try {
       const freshRes = await fetch(SETTINGS_FILE);
       if (freshRes.ok) {
@@ -137,7 +88,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (e) {}
 
     currentSettings.theme = themeSelect.value;
-    currentSettings.serverStartPath = rawPath;
+    delete currentSettings.serverStartPath;
 
     const ok = await window.saveTabData(SETTINGS_FILE, currentSettings);
     if (ok) {
@@ -146,5 +97,4 @@ document.addEventListener('DOMContentLoaded', async () => {
       modalBackdrop.classList.remove('open');
     }
   });
-
 });

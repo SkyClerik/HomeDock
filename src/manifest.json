@@ -1,7 +1,9 @@
 {
   "name": "Home DOCK",
-  "version": "2.1.4",
+  "version": "2.1.5",
   "author": "SkyClerik",
   "description": "Локальное стартовое окно и рабочий хаб для ссылок, софта и заметок",
-  "repository": "https://github.com"
+  "repository": "https://github.com/SkyClerik/HomeDock",
+  "update_manifest_url": "https://raw.githubusercontent.com/SkyClerik/HomeDock/refs/heads/main/src/manifest.json",
+  "update_zip_url": "https://github.com/SkyClerik/HomeDock/archive/refs/heads/main.zip"
 }

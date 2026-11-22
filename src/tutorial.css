@@ -1,0 +1,89 @@
+.vn-modal-box {
+  display: flex;
+  flex-direction: row;
+  width: 900px;
+  max-width: 95vw;
+  height: 800px;
+  max-height: 92vh;
+  padding: 0 !important;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #0f172a;
+  border: 1px solid #334155;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+}
+
+.vn-left-art {
+  width: 380px;
+  flex-shrink: 0;
+  background: #020617;
+  border-right: 1px solid #1e293b;
+}
+
+.vn-left-art img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+}
+
+.vn-right-dialog {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  min-width: 0;
+}
+
+.vn-header {
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 14px;
+  margin-bottom: 14px;
+}
+
+.vn-header h3 {
+  margin: 0;
+  font-size: 18px;
+  color: #f8fafc;
+}
+
+.vn-scroll-text {
+  flex: 1;
+  overflow-y: auto;
+  padding-right: 12px;
+  font-size: 14px;
+  line-height: 1.65;
+  color: #cbd5e1;
+}
+
+.vn-scroll-text p,
+.vn-scroll-text div {
+  margin-top: 0;
+  margin-bottom: 12px;
+}
+
+.vn-scroll-text::-webkit-scrollbar {
+  width: 6px;
+}
+
+.vn-scroll-text::-webkit-scrollbar-track {
+  background: #1e293b;
+  border-radius: 4px;
+}
+
+.vn-scroll-text::-webkit-scrollbar-thumb {
+  background: #ef4444;
+  border-radius: 4px;
+}
+
+.vn-footer {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid #1e293b;
+}
+
+#tut-close-btn {
+  width: 100%;
+  justify-content: center;
+}

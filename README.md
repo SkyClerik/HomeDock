@@ -9,9 +9,9 @@
 ## 📸 Скриншоты интерфейса
 
 <p align="center">
-  <img src="docs/screen-links.png" alt="Менеджер ссылок" width="32%">
-  <img src="docs/screen-soft.png" alt="Лаунчер программ" width="32%">
-  <img src="docs/screen-design.png" alt="База знаний и Markdown" width="32%">
+  <img src="docs/screen-links.webp" alt="Менеджер ссылок" width="32%">
+  <img src="docs/screen-soft.webp" alt="Лаунчер программ" width="32%">
+  <img src="docs/screen-design.webp" alt="База знаний и Markdown" width="32%">
 </p>
 
 ---
@@ -41,7 +41,7 @@
 4. Первым делон надо открыть "Управление вкладками" и создать вкладки из доступных шаблонов. Позже можно настроить имена и порядок в "МЕНЮ" вкладок
 
 <p align="center">
-  <img src="docs/up_hub.png" alt="Шапка сайта" width="40%">
+  <img src="docs/up_hub.webp" alt="Шапка сайта" width="40%">
 </p>
 <p align="center">
   <img src="docs/insert_tab.webp" alt="Создание из шаблона" width="40%">

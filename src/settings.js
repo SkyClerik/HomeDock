@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <option value="styles-nier.css">Nier Automata</option>
           <option value="styles-ubuntu.css">Ubuntu</option>
           <option value="styles-linux-mint.css">Mint</option>
+		  <option value="styles-KDENeon.css">KDE Neon</option>
         </select>
       </div>
 

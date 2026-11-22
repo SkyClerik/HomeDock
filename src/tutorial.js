@@ -2,9 +2,10 @@ const HELPER_DIR = 'helper/';
 
 // Словарь эмоций/артов персонажа
 const HELPER_ARTS = {
-  default: 'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.webp',
-  update:  'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.webp', // заменишь на арт обновления
-  error:   'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.webp'  // заменишь на злой/грустный арт
+  default: 'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/default.webp',
+  welcome: 'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/welcome.webp',
+  update:  'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/update.webp', // заменишь на арт обновления
+  error:   'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/error.webp'  // заменишь на злой/грустный арт
 };
 
 window.showHelper = async function (options = {}) {

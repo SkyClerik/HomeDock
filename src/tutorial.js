@@ -12,7 +12,6 @@ window.showHelper = async function (options = {}) {
   const {
     contentFile = 'welcome.html', // Имя файла внутри папки helper/
     title = '👋 Добро пожаловать в Home DOCK',
-    mood = 'default',             // Эмоция из словаря HELPER_ARTS
     artUrl = HELPER_ARTS.default,                // Прямая ссылка (если нужно переопределить mood)
     buttonText = 'Понятно',
     onClose = null
@@ -52,7 +51,7 @@ window.showHelper = async function (options = {}) {
   modal.innerHTML = `
     <div class="settings-modal vn-modal-box">
       <div class="vn-left-art">
-        <img src="${HELPER_ARTS.welcome}" alt="Character">
+        <img src="${artUrl}" alt="Character">
       </div>
 
       <div class="vn-right-dialog">
@@ -122,7 +121,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.showHelper({
       contentFile: 'whats-new.html',
       title: `🚀 Что нового в ${appName} v${currentVersion}`,
-      mood: 'update',
+      artUrl: HELPER_ARTS.update,
       buttonText: 'Круто, погнали!',
       onClose: saveVersion // Записываем версию в JSON, когда пользователь дочитает и нажмет кнопку
     });
@@ -133,8 +132,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     window.showHelper({
       contentFile: 'welcome.html',
       title: `👋 Добро пожаловать в ${appName} v${currentVersion}`,
-      mood: 'default',
-      artUrl: HELPER_ARTS.update,
+      artUrl: HELPER_ARTS.welcome,
       buttonText: 'Далее: что нового →',
       onClose: () => {
         // При нажатии кнопки сразу запускаем второе окно!

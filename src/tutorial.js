@@ -2,9 +2,9 @@ const HELPER_DIR = 'helper/';
 
 // Словарь эмоций/артов персонажа
 const HELPER_ARTS = {
-  default: 'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.png',
-  update:  'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.png', // заменишь на арт обновления
-  error:   'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.png'  // заменишь на злой/грустный арт
+  default: 'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.webp',
+  update:  'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.webp', // заменишь на арт обновления
+  error:   'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.webp'  // заменишь на злой/грустный арт
 };
 
 window.showHelper = async function (options = {}) {
@@ -117,20 +117,33 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (e) {}
   };
 
+
+  // Показ приветствия
   if (savedVersion === '0') {
     window.showHelper({
       contentFile: 'welcome.html',
       title: `👋 Добро пожаловать в ${appName} v${currentVersion}`,
       mood: 'default',
-      onClose: saveVersion
+      buttonText: 'Далее: что нового →',
+      onClose: () => {
+        // При нажатии кнопки сразу запускаем второе окно!
+        showWhatsNew();
+      }
     });
   } else {
+    // Если приветствие уже было, но версия обновилась — показываем сразу "Что нового"
+    showWhatsNew();
+  }
+
+    // Выносим показ окна "Что нового" в отдельную функцию
+  const showWhatsNew = () => {
     window.showHelper({
       contentFile: 'whats-new.html',
       title: `🚀 Что нового в ${appName} v${currentVersion}`,
       mood: 'update',
       buttonText: 'Круто, погнали!',
-      onClose: saveVersion
+      onClose: saveVersion // Записываем версию в JSON, когда пользователь дочитает и нажмет кнопку
     });
-  }
+  };
+
 });

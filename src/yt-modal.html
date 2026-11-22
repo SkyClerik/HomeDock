@@ -1,0 +1,70 @@
+<div class="yt-modal">
+  <div class="yt-modal-header">
+    <h3>📺 YouTube Video Info</h3>
+    <button type="button" class="yt-btn" id="yt-btn-close" title="Закрыть">✕</button>
+  </div>
+
+  <div class="yt-input-row">
+    <input type="text" id="yt-edit-url" placeholder="Вставьте ссылку на YouTube видео (watch, youtu.be, shorts, embed)...">
+    <button type="button" class="yt-btn primary" id="yt-btn-fetch">Получить</button>
+  </div>
+
+  <div class="yt-section-label">Основные данные</div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">Video ID:</span>
+    <input type="text" id="yt-txt-id" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-id">Копировать</button>
+  </div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">Watch URL:</span>
+    <input type="text" id="yt-txt-watch" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-watch">Копировать</button>
+  </div>
+
+  <div class="yt-section-label">Превью (Thumbnails)</div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">default:</span>
+    <input type="text" id="yt-txt-def" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-def">Копировать</button>
+  </div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">hqdefault:</span>
+    <input type="text" id="yt-txt-hq" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-hq">Копировать</button>
+  </div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">maxres:</span>
+    <input type="text" id="yt-txt-max" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-max">Копировать</button>
+  </div>
+
+  <div class="yt-section-label">Данные из oEmbed</div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">Title:</span>
+    <input type="text" id="yt-txt-title" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-title">Копировать</button>
+  </div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">Author:</span>
+    <input type="text" id="yt-txt-author" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-author">Копировать</button>
+  </div>
+  <div class="yt-input-row">
+    <span class="yt-field-label">Channel:</span>
+    <input type="text" id="yt-txt-channel" readonly>
+    <button type="button" class="yt-btn yt-copy-btn" data-target="yt-txt-channel">Копировать</button>
+  </div>
+
+  <div class="yt-preview-box" id="yt-preview-box" style="display: none;">
+    <img id="yt-preview-img" referrerpolicy="no-referrer" alt="Preview">
+    <div class="yt-preview-meta">
+      <strong id="yt-preview-title" style="font-size: 13px; color: #fff;"></strong>
+      <span id="yt-preview-author" style="font-size: 12px; color: #9ca3af;"></span>
+    </div>
+  </div>
+
+  <div class="yt-modal-footer">
+    <div class="yt-status-bar" id="yt-status">Готов. Вставьте ссылку и нажмите «Получить».</div>
+    <button type="button" class="yt-btn primary" id="yt-btn-copy-card" title="Скопировать как JSON-карточку для кнопки «Вставить»">📋 Скопировать как карточку</button>
+  </div>
+</div>

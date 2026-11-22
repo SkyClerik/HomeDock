@@ -20,7 +20,7 @@ window.showHelper = async function (options = {}) {
 
   const cssPath = `${HELPER_DIR}tutorial.css`;
   const filePath = contentFile.startsWith(HELPER_DIR) ? contentFile : `${HELPER_DIR}${contentFile}`;
-  const finalArt = artUrl || HELPER_ARTS[mood] || HELPER_ARTS.default;
+  const finalArt = artUrl || HELPER_ARTS[mood] || HELPER_ARTS.welcome;
 
   // Подключаем стили из папки helper/
   if (!document.querySelector(`link[href="${cssPath}"]`)) {
@@ -118,24 +118,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (e) {}
   };
 
-
-  // Показ приветствия
-  if (savedVersion === '0') {
-    window.showHelper({
-      contentFile: 'welcome.html',
-      title: `👋 Добро пожаловать в ${appName} v${currentVersion}`,
-      mood: 'default',
-      buttonText: 'Далее: что нового →',
-      onClose: () => {
-        // При нажатии кнопки сразу запускаем второе окно!
-        showWhatsNew();
-      }
-    });
-  } else {
-    // Если приветствие уже было, но версия обновилась — показываем сразу "Что нового"
-    showWhatsNew();
-  }
-
     // Выносим показ окна "Что нового" в отдельную функцию
   const showWhatsNew = () => {
     window.showHelper({
@@ -146,5 +128,23 @@ document.addEventListener('DOMContentLoaded', async () => {
       onClose: saveVersion // Записываем версию в JSON, когда пользователь дочитает и нажмет кнопку
     });
   };
+
+  // Показ приветствия
+  if (savedVersion === '0') {
+    window.showHelper({
+      contentFile: 'welcome.html',
+      title: `👋 Добро пожаловать в ${appName} v${currentVersion}`,
+      mood: 'default',
+      artUrl: HELPER_ARTS.update,
+      buttonText: 'Далее: что нового →',
+      onClose: () => {
+        // При нажатии кнопки сразу запускаем второе окно!
+        showWhatsNew();
+      }
+    });
+  } else {
+    // Если приветствие уже было, но версия обновилась — показываем сразу "Что нового"
+    showWhatsNew();
+  }
 
 });

@@ -39,6 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           <option value="styles-ubuntu.css">Ubuntu</option>
           <option value="styles-linux-mint.css">Mint</option>
 		  <option value="styles-KDENeon.css">KDE Neon</option>
+		  <option value="styles-twitch.css">Twitch</option>
         </select>
       </div>
 

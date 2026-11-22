@@ -1,73 +1,136 @@
-document.addEventListener('DOMContentLoaded', async () => {
-  const SETTINGS_FILE = 'settings.json';
-  let settings = {};
+const HELPER_DIR = 'helper/';
 
-  // 1. Читаем settings.json
-  try {
-    const res = await fetch(SETTINGS_FILE);
-    if (res.ok) {
-      settings = await res.json();
-    }
-  } catch (e) {
-    // Если файла еще нет — считаем, что обучение не пройдено
+// Словарь эмоций/артов персонажа
+const HELPER_ARTS = {
+  default: 'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.png',
+  update:  'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.png', // заменишь на арт обновления
+  error:   'https://raw.githubusercontent.com/SkyClerik/HomeDock/main/docs/nut.png'  // заменишь на злой/грустный арт
+};
+
+window.showHelper = async function (options = {}) {
+  const {
+    contentFile = 'welcome.html', // Имя файла внутри папки helper/
+    title = '👋 Добро пожаловать в Home DOCK',
+    mood = 'default',             // Эмоция из словаря HELPER_ARTS
+    artUrl = null,                // Прямая ссылка (если нужно переопределить mood)
+    buttonText = 'Понятно',
+    onClose = null
+  } = options;
+
+  const cssPath = `${HELPER_DIR}tutorial.css`;
+  const filePath = contentFile.startsWith(HELPER_DIR) ? contentFile : `${HELPER_DIR}${contentFile}`;
+  const finalArt = artUrl || HELPER_ARTS[mood] || HELPER_ARTS.default;
+
+  // Подключаем стили из папки helper/
+  if (!document.querySelector(`link[href="${cssPath}"]`)) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssPath;
+    document.head.appendChild(link);
   }
 
-  // Если уже читали — просто выходим
-  if (settings.tutorialRead === true) return;
-
-  // 2. Подтягиваем название и версию проекта из config.py
-  let appTitle = 'Home Dock';
+  // Загружаем текст (поддерживает .html и .md)
+  let bodyHtml = `<p>Файл <code>${filePath}</code> не найден.</p>`;
   try {
-    const infoRes = await fetch('/api/app-info');
-    if (infoRes.ok) {
-      const info = await infoRes.json();
-      if (info.name && info.version) {
-        appTitle = `${info.name} ${info.version}`;
-      } else if (info.full_title) {
-        appTitle = info.full_title;
+    const textRes = await fetch(filePath);
+    if (textRes.ok) {
+      const rawText = await textRes.text();
+      if (filePath.endsWith('.md') && typeof marked !== 'undefined') {
+        bodyHtml = marked.parse(rawText);
+      } else {
+        bodyHtml = rawText;
       }
     }
-  } catch (e) {
-    // Оставляем запасное название при ошибке сети
-  }
+  } catch (e) {}
 
-  // 3. Создаем и показываем модальное окно с текстом
+  const existing = document.getElementById('vn-helper-modal');
+  if (existing) existing.remove();
+
   const modal = document.createElement('div');
+  modal.id = 'vn-helper-modal';
   modal.className = 'settings-modal-backdrop open';
   modal.innerHTML = `
-    <div class="settings-modal" style="max-width: 540px;">
-      <h3>👋 Добро пожаловать в ${appTitle}</h3>
-
-      <div style="display: flex; flex-direction: column; gap: 10px; font-size: 13.5px; line-height: 1.5; color: #cbd5e1; margin: 14px 0;">
-        <div><b>📑 Вкладки:</b> Переключайтесь в левом меню или создавайте новые из шаблонов через кнопку <b>📑</b> в шапке.</div>
-        <div><b>🔍 Поиск:</b> Нажмите <b>Ctrl + K</b> для быстрого фильтра по названию, тегу или ссылке.</div>
-        <div><b>🖼️ Обои:</b> Положите картинки в папку <code>wallpapers/</code> внутри любой вкладки — фон сменится сам.</div>
-        <div><b>⚙️ Управление:</b> В правом верхнем углу находятся YouTube-помощник, настройки тем и перезапуск сервера.</div>
+    <div class="settings-modal vn-modal-box">
+      <div class="vn-left-art">
+        <img src="${finalArt}" alt="Character">
       </div>
 
-      <div class="settings-footer">
-        <button type="button" class="settings-save-btn" id="tut-close-btn" style="width: 100%; justify-content: center;">
-          Понятно
-        </button>
+      <div class="vn-right-dialog">
+        <div class="vn-header">
+          <h3>${title}</h3>
+        </div>
+
+        <div class="vn-scroll-text">
+          ${bodyHtml}
+        </div>
+
+        <div class="vn-footer">
+          <button type="button" class="settings-save-btn" id="tut-close-btn">
+            ${buttonText}
+          </button>
+        </div>
       </div>
     </div>
   `;
   document.body.appendChild(modal);
 
-  // 4. При закрытии записываем флаг в settings.json
   document.getElementById('tut-close-btn').addEventListener('click', async () => {
     modal.remove();
+    if (typeof onClose === 'function') {
+      await onClose();
+    }
+  });
+};
+
+document.addEventListener('DOMContentLoaded', async () => {
+  const SETTINGS_FILE = 'settings.json';
+  const MANIFEST_FILE = 'manifest.json';
+
+  let settings = {};
+  let manifest = {};
+
+  try {
+    const [setRes, manRes] = await Promise.all([
+      fetch(SETTINGS_FILE),
+      fetch(MANIFEST_FILE)
+    ]);
+    if (setRes.ok) settings = await setRes.json();
+    if (manRes.ok) manifest = await manRes.json();
+  } catch (e) {}
+
+  const currentVersion = String(manifest.version || '0');
+  const savedVersion = String(settings.lastSeenVersion || '0');
+  const appName = manifest.name || 'Home DOCK';
+
+  if (savedVersion === currentVersion) return;
+
+  const saveVersion = async () => {
     try {
-      // Перечитываем актуальный settings.json перед сохранением, чтобы не затереть настройки
       const res = await fetch(SETTINGS_FILE);
       const freshSettings = res.ok ? await res.json() : {};
-      freshSettings.tutorialRead = true;
+      delete freshSettings.tutorialRead;
+      freshSettings.lastSeenVersion = currentVersion;
 
       if (typeof window.saveTabData === 'function') {
         await window.saveTabData(SETTINGS_FILE, freshSettings);
       }
-    } catch (e) {
-      // Игнорируем ошибку сети при закрытии
-    }
-  });
+    } catch (e) {}
+  };
+
+  if (savedVersion === '0') {
+    window.showHelper({
+      contentFile: 'welcome.html',
+      title: `👋 Добро пожаловать в ${appName} v${currentVersion}`,
+      mood: 'default',
+      onClose: saveVersion
+    });
+  } else {
+    window.showHelper({
+      contentFile: 'whats-new.html',
+      title: `🚀 Что нового в ${appName} v${currentVersion}`,
+      mood: 'update',
+      buttonText: 'Круто, погнали!',
+      onClose: saveVersion
+    });
+  }
 });

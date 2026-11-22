@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', async () => {
   const SETTINGS_FILE = 'settings.json';
+  const THEME_DIR = 'resources/'; // <-- Путь к папке задается ТОЛЬКО ЗДЕСЬ
   const themeLink = document.getElementById('theme-link');
   const openBtn = document.getElementById('btn-open-settings');
   const statusText = document.getElementById('status-text');
@@ -8,8 +9,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     theme: 'styles-gx.css'
   };
 
-  // Передает имя файла активной темы всем вкладкам
-  function broadcastThemeChange(themeFileName) {
+  // Единая функция: применяет тему на странице и сообщает остальным скриптам
+  function applyTheme(themeFileName) {
+    if (!themeFileName) return;
+    if (themeLink) {
+      themeLink.href = `${THEME_DIR}${themeFileName}`;
+    }
     window.CURRENT_THEME = themeFileName;
     window.dispatchEvent(new CustomEvent('dock-theme-changed', {
       detail: { theme: themeFileName }
@@ -57,10 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     } catch (e) {
       // Если файла еще нет — используем дефолтные значения
     }
-    if (themeLink && currentSettings.theme) {
-      themeLink.href = currentSettings.theme;
-      broadcastThemeChange(currentSettings.theme);
-    }
+    applyTheme(currentSettings.theme);
     window.DOCK_SETTINGS = currentSettings;
   }
 
@@ -76,18 +78,12 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Предпросмотр темы сразу при смене в списке
   themeSelect.addEventListener('change', () => {
-    if (themeLink) {
-      themeLink.href = themeSelect.value;
-      broadcastThemeChange(themeSelect.value);
-    }
+    applyTheme(themeSelect.value);
   });
 
   // Отмена (возвращаем старую тему, если меняли для предпросмотра)
   document.getElementById('cfg-cancel').addEventListener('click', () => {
-    if (themeLink && currentSettings.theme) {
-      themeLink.href = currentSettings.theme;
-      broadcastThemeChange(currentSettings.theme);
-    }
+    applyTheme(currentSettings.theme);
     modalBackdrop.classList.remove('open');
   });
 

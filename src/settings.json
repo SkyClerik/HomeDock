@@ -1,5 +1,4 @@
 {
-  "theme": "styles-gx.css",
-  "serverStartPath": "start.bat",
+  "theme": "styles-ubuntu.css",
   "tutorialRead": false
 }

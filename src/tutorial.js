@@ -13,14 +13,13 @@ window.showHelper = async function (options = {}) {
     contentFile = 'welcome.html', // Имя файла внутри папки helper/
     title = '👋 Добро пожаловать в Home DOCK',
     mood = 'default',             // Эмоция из словаря HELPER_ARTS
-    artUrl = null,                // Прямая ссылка (если нужно переопределить mood)
+    artUrl = HELPER_ARTS.default,                // Прямая ссылка (если нужно переопределить mood)
     buttonText = 'Понятно',
     onClose = null
   } = options;
 
   const cssPath = `${HELPER_DIR}tutorial.css`;
   const filePath = contentFile.startsWith(HELPER_DIR) ? contentFile : `${HELPER_DIR}${contentFile}`;
-  const finalArt = artUrl || HELPER_ARTS[mood] || HELPER_ARTS.welcome;
 
   // Подключаем стили из папки helper/
   if (!document.querySelector(`link[href="${cssPath}"]`)) {
@@ -53,7 +52,7 @@ window.showHelper = async function (options = {}) {
   modal.innerHTML = `
     <div class="settings-modal vn-modal-box">
       <div class="vn-left-art">
-        <img src="${finalArt}" alt="Character">
+        <img src="${HELPER_ARTS.welcome}" alt="Character">
       </div>
 
       <div class="vn-right-dialog">
